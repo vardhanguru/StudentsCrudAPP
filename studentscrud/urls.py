@@ -1,27 +1,29 @@
-"""
-URL configuration for studentscrud project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
-from crudApp.views import studentView, createStudent, studentDelete,update
+
+from crudApp.views import (
+    DeleteStudentView,
+    StudentCreateView,
+    StudentDetailsView,
+    StudentListView,
+    StudentUpdateView,
+    createStudent,
+    studentDelete,
+    studentView,
+    update,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('students/',studentView),
-    path('add_student/',createStudent),
+    path('students/', StudentListView.as_view(), name='student-list'),
+    path('students/add/', StudentCreateView.as_view(), name='student-create'),
+    path('students/<int:pk>/', StudentDetailsView.as_view(), name='student-detail'),
+    path('students/update/<int:pk>/', StudentUpdateView.as_view(), name='student-update'),
+    path('students/delete/<int:pk>/', DeleteStudentView.as_view(), name='student-delete'),
+
+    # legacy function-based URLs kept for compatibility
+    path('students/list/', studentView),
+    path('add_student/', createStudent),
     path('delete_student/<int:id>', studentDelete),
     path('update/<int:id>', update),
 ]
